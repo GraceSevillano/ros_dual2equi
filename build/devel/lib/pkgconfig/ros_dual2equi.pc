@@ -1,8 +1,0 @@
-prefix=/home/grace/catkin_ws/src/ros_dual2equi/build/devel
-
-Name: ros_dual2equi
-Description: Description of ros_dual2equi
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
