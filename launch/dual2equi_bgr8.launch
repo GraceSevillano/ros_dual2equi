@@ -1,28 +1,33 @@
 <launch>
   <arg name="bagfile"/>
-	<arg name="inputImagesTopic" default="/THETA_S/image_raw"/>
-	<arg name="outputImagesTopic" default="/camera/equirectangular/image"/>
-  <arg name="coordinatesTableFilename" default="/home/gcaron/Developpement/catkin_ws/src/ros_dual2equi/data/dual2equi_coordinates_mapping_921600elems_of_4unsignedint_struct_ue_ve_ud_vd.txt"/>
+  <arg name="inputImagesTopic" default="/THETA_S/image_raw"/>
+  <arg name="outputImagesTopic" default="/camera/image_raw"/>
+  <arg name="coordinatesTableFilename" default="/catkin_ws/src/ros_dual2equi/data/dual2equi_coordinates_mapping_921600elems_of_4unsignedint_struct_ue_ve_ud_vd.txt"/>
+  <arg name="queue_size" default="10000"/>
 
-	<arg name="imWidth" default="1280"/>
-  <arg name="imHeight" default="960"/>
+  <arg name="imWidth" default="1280"/>
+  <arg name="imHeight" default="720"/>
 
-  <node name="dual2equi_fromtable" pkg="ros_dual2equi" type="dual2equi_fromtable" > <!-- output="screen"  -->
-  <param name="inputImagesTopic" type="string" value="$(arg inputImagesTopic)"/> 
-  <param name="outputImagesTopic" type="string" value="$(arg outputImagesTopic)"/> 
-  <param name="coordinatesTableFilename" type="string" value="$(arg coordinatesTableFilename)"/>
+  <param name="use_sim_time" value="true"/>
 
-  <param name="imWidth" type="int" value="$(arg imWidth)"/>
-  <param name="imHeight" type="int" value="$(arg imHeight)"/>
-
-  <param name="image_transport" type="string" value="compressed"/>
+  <node name="dual2equi_fromtable" pkg="ros_dual2equi" type="dual2equi_fromtable">
+    <param name="inputImagesTopic" type="string" value="$(arg inputImagesTopic)"/> 
+    <param name="outputImagesTopic" type="string" value="$(arg outputImagesTopic)"/> 
+    <param name="coordinatesTableFilename" type="string" value="$(arg coordinatesTableFilename)"/>
+    <param name="imWidth" type="int" value="$(arg imWidth)"/>
+    <param name="imHeight" type="int" value="$(arg imHeight)"/>
+    <param name="image_transport" type="string" value="raw"/>
   </node>
-  
-	<node pkg="rosbag" type="play" name="rosbag_data_play" args="$(arg bagfile)"/> <!--  launch-prefix="bash -c 'sleep 5s; $0 $@' " -->
 
-<!--  <node pkg="rosbag" type="record" name="rosbag_equi_record" args="$(arg outputImagesTopic)"/> -->
+  <node pkg="rosbag" type="play" name="rosbag_data_play" args="--clock $(arg bagfile)"/>
 
+  <node pkg="tf2_ros" type="static_transform_publisher" name="static_tf_pub_odom_to_THETA_S" args="0 0 0 0 0 0 1 odom THETA_S"/>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="static_tf_pub_THETA_S_to_camera" args="0 0 0 0 0 0 1 THETA_S camera"/>
+
+  <node pkg="ros_dual2equi" type="save_images_with_timestamps.py" name="save_images_with_timestamps" output="screen">
+    <param name="output_image_path" value="$(arg output_image_path)"/>
+    <param name="queue_size" value="$(arg queue_size)"/>
+  </node>
 
 </launch>
-
-
+ 
