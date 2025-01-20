@@ -1,4 +1,4 @@
-# ros_dualfisheye2equi
+# ros_dual2equi
 
 This package converts dual-fisheye images into equirectangular format using precomputed pixel coordinate mappings. The provided mappings are optimized for 1280x960 resolution, based on the Ricoh Theta S camera calibration from the MIS lab.
 
@@ -24,7 +24,7 @@ This package converts dual-fisheye images into equirectangular format using prec
 To run the package:
 
 ```bash
-roslaunch ros_dualfisheye2equi dual2equi_bgr8.launch bagfile:=/path/to/your.bag output_image_path:=/path/to/output
+roslaunch ros_dual2equi dual2equi_bgr8.launch bagfile:=/path/to/your.bag output_image_path:=/path/to/output
 ```
 
 ### Parameters
