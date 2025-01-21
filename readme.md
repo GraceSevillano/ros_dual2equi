@@ -8,7 +8,7 @@ This package converts dual-fisheye images into equirectangular format using prec
 
    ```bash
    cd ~/catkin_ws/src
-   git clone https://github.com/GraceSevillano/ros_dualfisheye2equi.git
+   git clone https://github.com/GraceSevillano/ros_dual2equi.git
    ```
 
 2. Build and source the package:
